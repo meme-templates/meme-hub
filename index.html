@@ -35,12 +35,6 @@
         header h1 { font-size: 3rem; font-weight: 800; margin-bottom: 10px; line-height: 1.2; }
         header p { font-size: 1.1rem; color: var(--text-muted); max-width: 600px; margin: 0 auto; }
 
-        .ad-banner { 
-            background: var(--card-bg); text-align: center; padding: 20px; margin: 30px auto; 
-            max-width: 900px; border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; 
-            color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px;
-        }
-
         .container { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
         
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; margin-bottom: 50px; }
@@ -50,48 +44,32 @@
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: flex; flex-direction: column;
         }
-        .card:hover { 
-            transform: translateY(-8px); 
-            border-color: rgba(255,0,127,0.3); 
-            box-shadow: 0 15px 30px rgba(0,0,0,0.5), 0 0 20px rgba(255,0,127,0.15); 
-        }
+        .card:hover { transform: translateY(-8px); border-color: var(--primary); }
         
         .image-container { position: relative; width: 100%; padding-top: 100%; background: #000; overflow: hidden; }
-        .card img { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            object-fit: contain; 
-            transition: transform 0.5s;
-        }
-        .card:hover img { transform: scale(1.05); }
+        .card img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; }
         
         .card-content { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-        .card h3 { font-size: 1rem; margin-bottom: 15px; font-weight: 600; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .card h3 { font-size: 1rem; margin-bottom: 15px; font-weight: 600; color: #fff; height: 3rem; overflow: hidden; }
         
         .download-btn { 
             background: linear-gradient(135deg, var(--primary), var(--secondary)); 
             border: none; color: white; padding: 12px; border-radius: 10px; 
-            font-weight: 600; font-size: 0.9rem; cursor: pointer; 
-            transition: opacity 0.3s; width: 100%; text-transform: uppercase; letter-spacing: 1px;
+            font-weight: 600; font-size: 0.9rem; cursor: pointer; width: 100%;
+            text-transform: uppercase;
         }
-        .download-btn:hover { opacity: 0.9; }
 
-        .load-more-container { text-align: center; margin: 20px 0 60px; }
+        .load-more-container { text-align: center; margin-bottom: 60px; }
         .load-more-btn {
-            background: #fff; color: #000; border: none;
-            padding: 15px 40px; font-size: 1.1rem; font-weight: 800;
-            border-radius: 30px; cursor: pointer; transition: 0.3s;
-            display: inline-flex; align-items: center; gap: 10px;
+            background: #fff; color: #000; border: none; padding: 15px 40px; 
+            font-size: 1.1rem; font-weight: 800; border-radius: 30px; cursor: pointer;
         }
-        .load-more-btn:hover { background: #e4e4e7; transform: translateY(-2px); }
-        
-        /* Error/Loading text */
-        #statusMessage { text-align: center; font-size: 1.2rem; color: var(--primary); margin: 20px 0; font-weight: bold; }
+
+        #statusMessage { text-align: center; font-size: 1.2rem; color: var(--primary); margin: 20px 0; }
 
         footer { border-top: 1px solid rgba(255,255,255,0.05); padding: 40px 20px; text-align: center; background: #000; }
-        .footer-links { display: flex; justify-content: center; gap: 20px; margin-bottom: 20px; flex-wrap: wrap; }
-        .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: color 0.3s; }
-        .footer-links a:hover { color: var(--primary); }
-        footer p { color: #52525b; font-size: 0.85rem; }
+        .footer-links { display: flex; justify-content: center; gap: 20px; margin-bottom: 15px; }
+        .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; }
     </style>
 </head>
 <body>
@@ -99,38 +77,26 @@
     <nav>
         <div class="logo">MemeHub Pro</div>
         <a href="https://instagram.com/meme_editer9" target="_blank" class="insta-link">@the_script_7</a>
-</a>
     </nav>
 
     <header>
         <h1>Premium HD Templates</h1>
-        <p>Top Trending blank meme formats in full resolution. Updated continuously.</p>
+        <p>Directly download top trending blank meme formats in HD.</p>
     </header>
-
-    <div class="ad-banner">
-        <span>AdSense Banner Area</span>
-    </div>
 
     <div class="container">
         <div id="statusMessage">Fetching Templates...</div>
         <div id="meme-grid" class="grid"></div>
-        
         <div class="load-more-container" id="loadMoreSection" style="display: none;">
-            <button id="loadMoreBtn" class="load-more-btn" onclick="showMoreMemes()">Load More Templates</button>
+            <button class="load-more-btn" onclick="showMoreMemes()">Load More</button>
         </div>
-    </div>
-
-    <div class="ad-banner">
-        <span>AdSense Banner Area</span>
     </div>
 
     <footer>
         <div class="footer-links">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
-            <a href="#">Contact Us</a>
+            <a href="#">Privacy</a> <a href="#">Terms</a> <a href="#">Contact</a>
         </div>
-        <p>&copy; 2026 MemeHub Pro. Top Memes Database.</p>
+        <p>&copy; 2026 MemeHub Pro.</p>
     </footer>
 
     <script>
@@ -138,62 +104,75 @@
         let currentIndex = 0;
         const memesPerPage = 20;
 
-        // Sabse reliable API (No proxy needed, kabhi block nahi hogi)
         async function fetchInitialMemes() {
             try {
                 const response = await fetch('https://api.imgflip.com/get_memes');
                 const data = await response.json();
-                
                 if (data.success) {
                     allMemesData = data.data.memes;
                     document.getElementById('statusMessage').style.display = 'none';
                     document.getElementById('loadMoreSection').style.display = 'block';
-                    showMoreMemes(); // Pehli 20 images dikhao
-                } else {
-                    throw new Error("API failed");
+                    showMoreMemes();
                 }
             } catch (error) {
-                document.getElementById('statusMessage').innerText = "Oops! Check your internet connection.";
-                console.error(error);
+                document.getElementById('statusMessage').innerText = "Connection Error!";
             }
         }
 
-        // 20-20 karke images load karna (Website fast rakhne ke liye)
         function showMoreMemes() {
             const grid = document.getElementById('meme-grid');
             const nextMemes = allMemesData.slice(currentIndex, currentIndex + memesPerPage);
             
-            let htmlContent = '';
             nextMemes.forEach(meme => {
-                htmlContent += `
-                <div class="card">
-                    <div class="image-container">
-                        <img src="${meme.url}" alt="${meme.name}" loading="lazy">
-                    </div>
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="image-container"><img src="${meme.url}" loading="lazy"></div>
                     <div class="card-content">
                         <h3>${meme.name}</h3>
-                        <button onclick="downloadImage('${meme.url}')" class="download-btn">Download HD</button>
+                        <button onclick="forceDownload('${meme.url}', '${meme.name}.jpg', this)" class="download-btn">Download HD</button>
                     </div>
-                </div>
                 `;
+                grid.appendChild(card);
             });
-
-            grid.innerHTML += htmlContent;
             currentIndex += memesPerPage;
+            if (currentIndex >= allMemesData.length) document.getElementById('loadMoreSection').style.display = 'none';
+        }
 
-            // Agar saari images khatam ho jayein toh button hata do
-            if (currentIndex >= allMemesData.length) {
-                document.getElementById('loadMoreSection').style.display = 'none';
+        // ==========================================
+        // 100% DIRECT DOWNLOAD LOGIC (BLOB METHOD)
+        // ==========================================
+        async function forceDownload(url, filename, btn) {
+            const originalText = btn.innerText;
+            btn.innerText = "⏳ SAVING...";
+            btn.disabled = true;
+
+            try {
+                // Image data fetch karna
+                const response = await fetch(url);
+                const blob = await response.blob(); // Binary data mein convert karna
+                const blobUrl = window.URL.createObjectURL(blob);
+
+                // Hidden link banakar click karna (Forced Download)
+                const link = document.createElement('a');
+                link.href = blobUrl;
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                
+                // Cleanup
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(blobUrl);
+                btn.innerText = originalText;
+                btn.disabled = false;
+            } catch (error) {
+                console.log("Download failed, opening tab as fallback");
+                window.open(url, '_blank'); // Agar security block hui toh tab khulega
+                btn.innerText = originalText;
+                btn.disabled = false;
             }
         }
 
-        // Direct Download Fallback
-        function downloadImage(imageUrl) {
-            // New Tab fallback - kyunki public images ko browser direct save hone se block kar deta hai cross-origin par
-            window.open(imageUrl, '_blank');
-        }
-
-        // Page load hote hi API call
         fetchInitialMemes();
     </script>
 </body>
