@@ -106,7 +106,7 @@
 
     <nav>
         <div class="logo">MemeHub Pro</div>
-        <a href="#" class="insta-link">@meme_editer9</a>
+        <a href="https://instagram.com/meme_editer9" target="_blank" class="insta-link">@meme_editer9</a>
     </nav>
 
     <header>
@@ -147,7 +147,7 @@
         let afterToken = ''; 
         let isFetching = false; 
 
-        // Fetching Memes from Reddit
+        // Fetching Memes from Reddit with Proxy (Live Website Fix)
         async function fetchMemes() {
             if (isFetching) return;
             isFetching = true;
@@ -159,7 +159,13 @@
             spinner.style.display = "inline-block";
 
             try {
-                const response = await fetch(`https://www.reddit.com/r/MemeTemplatesOfficial/hot.json?limit=50&after=${afterToken}`);
+                // Reddit ka original URL
+                const redditUrl = `https://www.reddit.com/r/MemeTemplatesOfficial/hot.json?limit=50&after=${afterToken}`;
+                
+                // Proxy URL jo GitHub Pages par CORS block ko bypass karega
+                const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(redditUrl);
+                
+                const response = await fetch(proxyUrl);
                 const data = await response.json();
                 
                 afterToken = data.data.after; 
@@ -200,7 +206,7 @@
             }
         }
 
-        // Direct Download with Double Proxy Bypass (100% Working)
+        // Direct Download with Double Proxy Bypass
         async function downloadImage(imageUrl, fileName, btnElement) {
             const originalText = btnElement.innerText;
             btnElement.innerText = "⏳ Fetching...";
@@ -251,7 +257,6 @@
                     btnElement.innerText = originalText;
 
                 } catch (error2) {
-                    // Agar dono fail ho jayein (Internet issue) tabhi tab khulega
                     console.error("Direct download failed", error2);
                     window.open(imageUrl, '_blank');
                     btnElement.innerText = originalText;
@@ -259,7 +264,7 @@
             }
         }
 
-        // Initial Load
+        // Initial Load jab site khulti hai
         fetchMemes();
     </script>
 </body>
