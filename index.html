@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MemeHub Pro | 10,000+ HD Blank Templates</title>
+    <title>MemeHub Pro | HD Blank Templates</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     
     <style>
@@ -19,7 +19,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background-color: var(--bg-dark); color: var(--text-main); line-height: 1.6; }
         
-        /* Glassmorphism Navbar */
         nav {
             position: sticky; top: 0; z-index: 1000;
             background: rgba(9, 9, 11, 0.8);
@@ -32,12 +31,10 @@
         .insta-link { color: var(--text-main); text-decoration: none; font-weight: 600; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 20px; transition: 0.3s; }
         .insta-link:hover { background: rgba(255,255,255,0.1); }
 
-        /* Hero Section */
         header { text-align: center; padding: 60px 20px 40px; }
         header h1 { font-size: 3rem; font-weight: 800; margin-bottom: 10px; line-height: 1.2; }
         header p { font-size: 1.1rem; color: var(--text-muted); max-width: 600px; margin: 0 auto; }
 
-        /* AdSense Placeholder */
         .ad-banner { 
             background: var(--card-bg); text-align: center; padding: 20px; margin: 30px auto; 
             max-width: 900px; border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; 
@@ -46,7 +43,6 @@
 
         .container { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
         
-        /* Premium Grid */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; margin-bottom: 50px; }
         .card { 
             background: var(--card-bg); border-radius: 16px; overflow: hidden; 
@@ -60,11 +56,10 @@
             box-shadow: 0 15px 30px rgba(0,0,0,0.5), 0 0 20px rgba(255,0,127,0.15); 
         }
         
-        /* Uniform Image Sizing */
         .image-container { position: relative; width: 100%; padding-top: 100%; background: #000; overflow: hidden; }
         .card img { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            object-fit: cover; 
+            object-fit: contain; 
             transition: transform 0.5s;
         }
         .card:hover img { transform: scale(1.05); }
@@ -72,7 +67,6 @@
         .card-content { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
         .card h3 { font-size: 1rem; margin-bottom: 15px; font-weight: 600; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         
-        /* Gradient Button */
         .download-btn { 
             background: linear-gradient(135deg, var(--primary), var(--secondary)); 
             border: none; color: white; padding: 12px; border-radius: 10px; 
@@ -81,7 +75,6 @@
         }
         .download-btn:hover { opacity: 0.9; }
 
-        /* Load More Section & Spinner */
         .load-more-container { text-align: center; margin: 20px 0 60px; }
         .load-more-btn {
             background: #fff; color: #000; border: none;
@@ -91,10 +84,9 @@
         }
         .load-more-btn:hover { background: #e4e4e7; transform: translateY(-2px); }
         
-        .spinner { display: none; width: 20px; height: 20px; border: 3px solid rgba(0,0,0,0.1); border-top-color: #000; border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        /* Error/Loading text */
+        #statusMessage { text-align: center; font-size: 1.2rem; color: var(--primary); margin: 20px 0; font-weight: bold; }
 
-        /* Professional Footer */
         footer { border-top: 1px solid rgba(255,255,255,0.05); padding: 40px 20px; text-align: center; background: #000; }
         .footer-links { display: flex; justify-content: center; gap: 20px; margin-bottom: 20px; flex-wrap: wrap; }
         .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: color 0.3s; }
@@ -110,8 +102,8 @@
     </nav>
 
     <header>
-        <h1>Unlimited HD Templates</h1>
-        <p>The ultimate daily-updated database for creators. Download 10,000+ blank meme formats in full resolution.</p>
+        <h1>Premium HD Templates</h1>
+        <p>Top Trending blank meme formats in full resolution. Updated continuously.</p>
     </header>
 
     <div class="ad-banner">
@@ -119,13 +111,11 @@
     </div>
 
     <div class="container">
+        <div id="statusMessage">Fetching Templates...</div>
         <div id="meme-grid" class="grid"></div>
         
-        <div class="load-more-container">
-            <button id="loadMoreBtn" class="load-more-btn" onclick="fetchMemes()">
-                <span class="spinner" id="btnSpinner"></span>
-                <span id="btnText">Load More Templates</span>
-            </button>
+        <div class="load-more-container" id="loadMoreSection" style="display: none;">
+            <button id="loadMoreBtn" class="load-more-btn" onclick="showMoreMemes()">Load More Templates</button>
         </div>
     </div>
 
@@ -138,134 +128,72 @@
             <a href="#">Privacy Policy</a>
             <a href="#">Terms of Service</a>
             <a href="#">Contact Us</a>
-            <a href="#">DMCA</a>
         </div>
-        <p>&copy; 2026 MemeHub Pro. Powered by Reddit API.</p>
+        <p>&copy; 2026 MemeHub Pro. Top Memes Database.</p>
     </footer>
 
     <script>
-        let afterToken = ''; 
-        let isFetching = false; 
+        let allMemesData = [];
+        let currentIndex = 0;
+        const memesPerPage = 20;
 
-        // Fetching Memes from Reddit with Proxy (Live Website Fix)
-        async function fetchMemes() {
-            if (isFetching) return;
-            isFetching = true;
-            
-            const btnText = document.getElementById('btnText');
-            const spinner = document.getElementById('btnSpinner');
-            
-            btnText.innerText = "Fetching HD Memes...";
-            spinner.style.display = "inline-block";
-
+        // Sabse reliable API (No proxy needed, kabhi block nahi hogi)
+        async function fetchInitialMemes() {
             try {
-                // Reddit ka original URL
-                const redditUrl = `https://www.reddit.com/r/MemeTemplatesOfficial/hot.json?limit=50&after=${afterToken}`;
-                
-                // Proxy URL jo GitHub Pages par CORS block ko bypass karega
-                const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(redditUrl);
-                
-                const response = await fetch(proxyUrl);
+                const response = await fetch('https://api.imgflip.com/get_memes');
                 const data = await response.json();
                 
-                afterToken = data.data.after; 
-                const posts = data.data.children;
-                let htmlContent = '';
-
-                posts.forEach(post => {
-                    const postData = post.data;
-                    const imageUrl = postData.url;
-                    
-                    if (imageUrl && (imageUrl.includes('.jpg') || imageUrl.includes('.png') || imageUrl.includes('.jpeg'))) {
-                        let title = postData.title;
-                        if(title.length > 55) title = title.substring(0, 55) + "...";
-
-                        htmlContent += `
-                        <div class="card">
-                            <div class="image-container">
-                                <img src="${imageUrl}" alt="HD Meme Template" loading="lazy">
-                            </div>
-                            <div class="card-content">
-                                <h3>${title}</h3>
-                                <button onclick="downloadImage('${imageUrl}', 'MemeTemplate_${postData.id}.jpg', this)" class="download-btn">Download HD</button>
-                            </div>
-                        </div>
-                        `;
-                    }
-                });
-
-                document.getElementById('meme-grid').innerHTML += htmlContent;
-                
-            } catch (error) {
-                console.error("Error fetching memes:", error);
-                btnText.innerText = "Connection Error. Retry?";
-            } finally {
-                btnText.innerText = "Load More Templates";
-                spinner.style.display = "none";
-                isFetching = false;
-            }
-        }
-
-        // Direct Download with Double Proxy Bypass
-        async function downloadImage(imageUrl, fileName, btnElement) {
-            const originalText = btnElement.innerText;
-            btnElement.innerText = "⏳ Fetching...";
-            
-            try {
-                // Primary Fast Proxy
-                const proxy1 = 'https://corsproxy.io/?' + encodeURIComponent(imageUrl);
-                const response1 = await fetch(proxy1);
-                
-                if (!response1.ok) throw new Error('Proxy 1 failed');
-                
-                const blob = await response1.blob();
-                const blobUrl = window.URL.createObjectURL(blob);
-                
-                const a = document.createElement('a');
-                a.style.display = 'none';
-                a.href = blobUrl;
-                a.download = fileName;
-                document.body.appendChild(a);
-                a.click();
-                
-                window.URL.revokeObjectURL(blobUrl);
-                document.body.removeChild(a);
-                btnElement.innerText = originalText;
-
-            } catch (error1) {
-                console.log("Proxy 1 blocked, trying Proxy 2...");
-                
-                try {
-                    // Secondary Fallback Proxy
-                    const proxy2 = 'https://api.codetabs.com/v1/proxy/?quest=' + encodeURIComponent(imageUrl);
-                    const response2 = await fetch(proxy2);
-                    
-                    if (!response2.ok) throw new Error('Proxy 2 failed');
-
-                    const blob = await response2.blob();
-                    const blobUrl = window.URL.createObjectURL(blob);
-                    
-                    const a = document.createElement('a');
-                    a.style.display = 'none';
-                    a.href = blobUrl;
-                    a.download = fileName;
-                    document.body.appendChild(a);
-                    a.click();
-                    
-                    window.URL.revokeObjectURL(blobUrl);
-                    document.body.removeChild(a);
-                    btnElement.innerText = originalText;
-
-                } catch (error2) {
-                    console.error("Direct download failed", error2);
-                    window.open(imageUrl, '_blank');
-                    btnElement.innerText = originalText;
+                if (data.success) {
+                    allMemesData = data.data.memes;
+                    document.getElementById('statusMessage').style.display = 'none';
+                    document.getElementById('loadMoreSection').style.display = 'block';
+                    showMoreMemes(); // Pehli 20 images dikhao
+                } else {
+                    throw new Error("API failed");
                 }
+            } catch (error) {
+                document.getElementById('statusMessage').innerText = "Oops! Check your internet connection.";
+                console.error(error);
             }
         }
 
-        // Initial Load jab site khulti hai
-        fetchMemes();
+        // 20-20 karke images load karna (Website fast rakhne ke liye)
+        function showMoreMemes() {
+            const grid = document.getElementById('meme-grid');
+            const nextMemes = allMemesData.slice(currentIndex, currentIndex + memesPerPage);
+            
+            let htmlContent = '';
+            nextMemes.forEach(meme => {
+                htmlContent += `
+                <div class="card">
+                    <div class="image-container">
+                        <img src="${meme.url}" alt="${meme.name}" loading="lazy">
+                    </div>
+                    <div class="card-content">
+                        <h3>${meme.name}</h3>
+                        <button onclick="downloadImage('${meme.url}')" class="download-btn">Download HD</button>
+                    </div>
+                </div>
+                `;
+            });
+
+            grid.innerHTML += htmlContent;
+            currentIndex += memesPerPage;
+
+            // Agar saari images khatam ho jayein toh button hata do
+            if (currentIndex >= allMemesData.length) {
+                document.getElementById('loadMoreSection').style.display = 'none';
+            }
+        }
+
+        // Direct Download Fallback
+        function downloadImage(imageUrl) {
+            // New Tab fallback - kyunki public images ko browser direct save hone se block kar deta hai cross-origin par
+            window.open(imageUrl, '_blank');
+        }
+
+        // Page load hote hi API call
+        fetchInitialMemes();
     </script>
 </body>
 </html>
