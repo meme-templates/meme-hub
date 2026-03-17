@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MemeHub Pro | Ultimate HD Templates</title>
+    <title>MemeHub Pro | HD Images & Video Templates</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --primary: #00e5ff; /* Cyan Neon */
-            --secondary: #b900ff; /* Purple Neon */
+            --primary: #00e5ff; 
+            --secondary: #b900ff; 
             --bg-dark: #050505;
             --card-bg: #121212;
             --text-main: #ffffff;
@@ -19,86 +19,80 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background-color: var(--bg-dark); color: var(--text-main); }
         
-        /* Glassmorphism Navbar */
         nav {
             position: sticky; top: 0; z-index: 1000;
-            background: rgba(5, 5, 5, 0.85);
-            backdrop-filter: blur(15px);
+            background: rgba(5, 5, 5, 0.85); backdrop-filter: blur(15px);
             border-bottom: 1px solid rgba(255,255,255,0.05);
-            padding: 15px 5%;
-            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;
         }
         .logo { font-size: 1.6rem; font-weight: 800; background: linear-gradient(90deg, var(--primary), var(--secondary)); -webkit-background-clip: text; color: transparent; letter-spacing: 1px; }
         .insta-link { color: var(--text-main); text-decoration: none; font-weight: 600; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.2); padding: 6px 16px; border-radius: 20px; transition: 0.3s; }
         .insta-link:hover { background: rgba(255,255,255,0.1); border-color: var(--primary); }
 
-        header { text-align: center; padding: 50px 20px 20px; }
-        header h1 { font-size: 3rem; font-weight: 800; margin-bottom: 10px; }
-        header p { color: var(--text-muted); font-size: 1.1rem; }
+        header { text-align: center; padding: 40px 20px 10px; }
+        header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 10px; }
         
-        /* Premium Search Bar */
-        .search-container { text-align: center; margin: 20px auto 40px; max-width: 650px; padding: 0 20px; }
+        .search-container { text-align: center; margin: 10px auto 20px; max-width: 650px; padding: 0 20px; }
         .search-box {
-            display: flex; background: var(--card-bg); 
-            padding: 8px; border-radius: 40px; border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex; background: var(--card-bg); padding: 8px; border-radius: 40px; 
+            border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         .search-box input {
             flex-grow: 1; background: transparent; border: none; color: white;
-            padding: 15px 25px; font-size: 1.1rem; outline: none;
+            padding: 12px 20px; font-size: 1rem; outline: none;
         }
         .search-box button {
-            background: linear-gradient(90deg, var(--secondary), var(--primary)); 
-            border: none; color: white; padding: 0 35px;
-            border-radius: 35px; font-weight: 700; cursor: pointer; transition: 0.3s;
-            text-transform: uppercase; letter-spacing: 1px;
+            background: linear-gradient(90deg, var(--secondary), var(--primary)); border: none; color: white; padding: 0 30px;
+            border-radius: 35px; font-weight: 700; cursor: pointer; text-transform: uppercase;
         }
-        .search-box button:hover { opacity: 0.9; transform: scale(0.98); }
 
-        /* Pinterest Style Masonry Grid */
-        .container { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
-        .masonry-grid {
-            column-count: 4; column-gap: 20px; margin-bottom: 50px;
+        /* Category Scroll Bar */
+        .categories {
+            display: flex; gap: 15px; padding: 10px 20px; margin-bottom: 30px;
+            overflow-x: auto; max-width: 1400px; margin-left: auto; margin-right: auto;
+            scrollbar-width: none; /* Firefox */
         }
+        .categories::-webkit-scrollbar { display: none; /* Chrome */ }
+        .cat-btn {
+            background: var(--card-bg); color: var(--text-muted); border: 1px solid rgba(255,255,255,0.1);
+            padding: 10px 25px; border-radius: 25px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: 0.3s;
+        }
+        .cat-btn.active {
+            background: rgba(0, 229, 255, 0.1); color: var(--primary); border-color: var(--primary);
+        }
+
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
+        .masonry-grid { column-count: 4; column-gap: 20px; margin-bottom: 50px; }
         @media (max-width: 1200px) { .masonry-grid { column-count: 3; } }
         @media (max-width: 900px) { .masonry-grid { column-count: 2; } }
         @media (max-width: 600px) { .masonry-grid { column-count: 1; } }
 
         .card { 
             background: var(--card-bg); border-radius: 16px; overflow: hidden; 
-            margin-bottom: 20px; break-inside: avoid;
-            border: 1px solid rgba(255,255,255,0.05);
-            transition: all 0.3s ease; position: relative;
+            margin-bottom: 20px; break-inside: avoid; border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s ease;
         }
-        .card:hover { transform: translateY(-5px); border-color: rgba(0, 229, 255, 0.5); box-shadow: 0 10px 25px rgba(0,0,0,0.8); }
-        
-        .card img { width: 100%; display: block; object-fit: cover; }
+        .card:hover { transform: translateY(-5px); border-color: rgba(0, 229, 255, 0.5); }
+        .card img, .card video { width: 100%; display: block; object-fit: cover; max-height: 500px; background: #000; }
         
         .card-content { padding: 15px; }
-        .card h3 { font-size: 0.95rem; margin-bottom: 15px; font-weight: 500; line-height: 1.4; color: #ddd; }
+        .card h3 { font-size: 0.95rem; margin-bottom: 15px; font-weight: 500; color: #ddd; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;}
         
         .download-btn { 
             background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); 
             color: white; padding: 10px; border-radius: 8px; font-weight: 600; 
-            cursor: pointer; width: 100%; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 8px;
+            cursor: pointer; width: 100%; transition: 0.3s; text-transform: uppercase;
         }
-        .card:hover .download-btn { background: var(--primary); color: #000; border-color: var(--primary); }
-
-        /* Loader */
-        .loader {
-            border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid var(--primary);
-            border-radius: 50%; width: 18px; height: 18px; animation: spin 1s linear infinite; display: none;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .download-btn.video-btn { background: rgba(185, 0, 255, 0.2); border-color: var(--secondary); color: #fff; }
+        .card:hover .download-btn { background: var(--primary); color: #000; }
+        .card:hover .download-btn.video-btn { background: var(--secondary); color: #fff; }
 
         .load-more-container { text-align: center; margin-bottom: 80px; }
         .load-more-btn {
             background: transparent; color: var(--primary); border: 2px solid var(--primary);
-            padding: 15px 40px; font-size: 1.1rem; font-weight: 700; border-radius: 30px; 
-            cursor: pointer; transition: 0.3s; text-transform: uppercase;
+            padding: 15px 40px; font-size: 1.1rem; font-weight: 700; border-radius: 30px; cursor: pointer;
         }
-        .load-more-btn:hover { background: var(--primary); color: #000; }
-        #statusMessage { text-align: center; font-size: 1.1rem; color: var(--text-muted); margin: 20px 0; }
+        #statusMessage { text-align: center; font-size: 1.1rem; color: var(--primary); margin: 20px 0; }
     </style>
 </head>
 <body>
@@ -109,15 +103,21 @@
     </nav>
 
     <header>
-        <h1>10,000+ HD Templates</h1>
-        <p>Search. Download. Create.</p>
+        <h1>10,000+ Templates</h1>
     </header>
 
     <div class="search-container">
         <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Search any meme (e.g., Cat, Brain, Drake)..." onkeypress="handleEnter(event)">
+            <input type="text" id="searchInput" placeholder="Search templates..." onkeypress="handleEnter(event)">
             <button onclick="searchMemes()">Search</button>
         </div>
+    </div>
+
+    <div class="categories" id="categoryBox">
+        <button class="cat-btn active" onclick="setCategory('MemeTemplatesOfficial', 'Trending', this)">🔥 Trending</button>
+        <button class="cat-btn" onclick="setCategory('IndianMemeTemplates', 'Indian', this)">🇮🇳 Indian Memes</button>
+        <button class="cat-btn" onclick="setCategory('MemeTemplatesOfficial', 'Videos', this)">🎬 Video Templates</button>
+        <button class="cat-btn" onclick="setCategory('DesiMemeTemplates', 'Bollywood', this)">🎭 Bollywood</button>
     </div>
 
     <div class="container">
@@ -132,14 +132,35 @@
         let afterToken = '';
         let isFetching = false;
         let currentQuery = '';
+        let currentSubreddit = 'MemeTemplatesOfficial';
+        let isVideoMode = false;
 
         function handleEnter(e) { if (e.key === 'Enter') searchMemes(); }
 
+        // Category Switcher Logic
+        function setCategory(subreddit, type, btnElement) {
+            // Update Active Button
+            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            currentSubreddit = subreddit;
+            isVideoMode = (type === 'Videos');
+            
+            // Reset grid and fetch fresh
+            afterToken = ''; 
+            currentQuery = '';
+            document.getElementById('searchInput').value = '';
+            document.getElementById('meme-grid').innerHTML = ''; 
+            fetchMemes();
+        }
+
         function searchMemes() {
-            const input = document.getElementById('searchInput').value.trim();
-            currentQuery = input;
+            currentQuery = document.getElementById('searchInput').value.trim();
             afterToken = ''; 
             document.getElementById('meme-grid').innerHTML = ''; 
+            
+            // Jab search karein tab UI reset karein
+            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
             fetchMemes();
         }
 
@@ -151,38 +172,56 @@
             const loadBtn = document.getElementById('loadBtn');
             const grid = document.getElementById('meme-grid');
             
-            status.innerText = "Fetching HD Templates...";
+            status.innerText = "Loading Memes...";
             if(afterToken !== '') loadBtn.innerText = "Loading...";
 
             try {
-                let apiUrl = `https://www.reddit.com/r/MemeTemplatesOfficial/hot.json?limit=50&after=${afterToken}`;
+                let apiUrl = `https://www.reddit.com/r/${currentSubreddit}/hot.json?limit=50&after=${afterToken}`;
                 if (currentQuery !== '') {
-                    apiUrl = `https://www.reddit.com/r/MemeTemplatesOfficial/search.json?q=${encodeURIComponent(currentQuery)}&restrict_sr=1&limit=50&after=${afterToken}`;
+                    apiUrl = `https://www.reddit.com/r/${currentSubreddit}/search.json?q=${encodeURIComponent(currentQuery)}&restrict_sr=1&limit=50&after=${afterToken}`;
                 }
 
-                const response = await fetch(apiUrl);
-                const data = await response.json();
+                // MOBILE FIX: Agar direct API block ho, toh Fallback Proxy lagayega
+                let response;
+                try {
+                    response = await fetch(apiUrl);
+                    if(!response.ok) throw new Error("Direct block");
+                } catch(e) {
+                    console.log("Mobile network blocked API, using proxy...");
+                    response = await fetch(`https://corsproxy.io/?${encodeURIComponent(apiUrl)}`);
+                }
                 
+                const data = await response.json();
                 afterToken = data.data.after; 
                 const posts = data.data.children;
                 let htmlContent = '';
 
                 posts.forEach(post => {
                     const postData = post.data;
-                    let imageUrl = postData.url;
-                    
-                    if (imageUrl && (imageUrl.includes('.jpg') || imageUrl.includes('.png') || imageUrl.includes('.jpeg'))) {
-                        let title = postData.title;
-                        if(title.length > 60) title = title.substring(0, 60) + "...";
+                    let title = postData.title;
+                    if(title.length > 60) title = title.substring(0, 60) + "...";
 
+                    // VIDEO TEMPLATES SUPPORT
+                    if (postData.is_video && postData.media && postData.media.reddit_video) {
+                        let videoUrl = postData.media.reddit_video.fallback_url;
+                        htmlContent += `
+                        <div class="card">
+                            <video src="${videoUrl}" controls loop muted preload="metadata"></video>
+                            <div class="card-content">
+                                <h3>${title}</h3>
+                                <button onclick="masterDownload('${videoUrl}', 'Video_${postData.id}.mp4', this)" class="download-btn video-btn">Download Video</button>
+                            </div>
+                        </div>`;
+                    } 
+                    // IMAGE TEMPLATES SUPPORT (Hide images if Video Mode is selected)
+                    else if (!isVideoMode && postData.url && postData.url.match(/\.(jpeg|jpg|gif|png)$/)) {
+                        let imageUrl = postData.url;
                         htmlContent += `
                         <div class="card">
                             <img src="${imageUrl}" loading="lazy">
                             <div class="card-content">
                                 <h3>${title}</h3>
-                                <button onclick="masterDownload('${imageUrl}', 'MemeHub_${postData.id}.jpg', this)" class="download-btn">
-                                    <div class="loader"></div> <span class="btn-text">Download HD</span>
-                                </button>
+                                <button onclick="masterDownload('${imageUrl}', 'Image_${postData.id}.jpg', this)" class="download-btn">Download HD</button>
                             </div>
                         </div>`;
                     }
@@ -198,76 +237,54 @@
                 }
 
             } catch (error) {
-                status.innerText = "Connection error. Please check your internet.";
+                status.innerText = "Connection error. Using backup server...";
+                // Agar internet ekdam dead na ho toh automatically 3 sec baad wapas try karega
+                setTimeout(() => { isFetching = false; fetchMemes(); }, 3000);
             } finally {
                 isFetching = false;
                 loadBtn.innerText = "Load More Templates";
             }
         }
 
-        // ==========================================
-        // THE ULTIMATE PROXY WATERFALL DOWNLOADER
-        // ==========================================
-        async function masterDownload(imageUrl, filename, btnElement) {
-            const btnText = btnElement.querySelector('.btn-text');
-            const loader = btnElement.querySelector('.loader');
-            
-            // UI Change to Loading
-            btnText.innerText = "Saving...";
-            loader.style.display = "block";
-            btnElement.style.pointerEvents = "none";
+        // UNIVERSAL DOWNLOADER (For both Image & Video)
+        async function masterDownload(fileUrl, filename, btnElement) {
+            const originalText = btnElement.innerText;
+            btnElement.innerText = "Saving...";
+            btnElement.style.opacity = "0.7";
 
-            // 3 Premium Proxies to bypass GitHub CORS restrictions
-            const proxies = [
-                `https://api.allorigins.win/raw?url=${encodeURIComponent(imageUrl)}`,
-                `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(imageUrl)}`,
-                `https://corsproxy.io/?${encodeURIComponent(imageUrl)}`
-            ];
-
-            let success = false;
-
-            for (let proxy of proxies) {
-                try {
-                    const response = await fetch(proxy);
-                    if (!response.ok) continue; // Agar proxy fail hui toh agli par jao
-                    
-                    const blob = await response.blob();
-                    const blobUrl = window.URL.createObjectURL(blob);
-                    
-                    const a = document.createElement('a');
-                    a.style.display = 'none';
-                    a.href = blobUrl;
-                    a.download = filename;
-                    document.body.appendChild(a);
-                    a.click();
-                    
-                    document.body.removeChild(a);
-                    window.URL.revokeObjectURL(blobUrl);
-                    
-                    success = true;
-                    break; // File download ho gayi, loop band karo
-                } catch (e) {
-                    console.log("Proxy failed, trying next...");
-                }
-            }
-
-            // Agar teeno proxy fail ho jayein ya user Instagram ke browser mein ho
-            if (!success) {
-                alert("Direct download blocked by your browser security. Opening image in new tab. Long-press to save it!");
-                window.open(imageUrl, '_blank');
-            }
-
-            // Reset UI
-            btnText.innerText = success ? "Downloaded!" : "Download HD";
-            loader.style.display = "none";
-            btnElement.style.pointerEvents = "auto";
-            
-            if(success){
-                setTimeout(() => { btnText.innerText = "Download HD"; }, 2000);
+            try {
+                // Check if it's a video
+                const isVideo = filename.includes('.mp4');
+                
+                // Videos ke liye proxy zaroorat nahi hoti aksar, direct blob fetch karo
+                let fetchUrl = isVideo ? fileUrl : `https://wsrv.nl/?url=${encodeURIComponent(fileUrl)}`;
+                
+                const response = await fetch(fetchUrl);
+                const blob = await response.blob();
+                const blobUrl = window.URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = blobUrl;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(blobUrl);
+                
+                btnElement.innerText = "✅ DONE!";
+                setTimeout(() => { btnElement.innerText = originalText; }, 2000);
+                
+            } catch (error) {
+                alert("Mobile browser blocked direct download! Opening in new tab to save.");
+                window.open(fileUrl, '_blank');
+                btnElement.innerText = originalText;
+            } finally {
+                btnElement.style.opacity = "1";
             }
         }
 
-        // Load first batch
         fetchMemes();
     </script>
 </body>
