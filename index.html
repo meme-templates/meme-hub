@@ -68,9 +68,43 @@
         .q-btn:hover { background: var(--primary); color: #000; }
         
         #loading-trigger { text-align: center; padding: 20px; color: var(--primary); font-weight: bold; font-size: 1.2rem; }
+
+        /* ==========================================
+           ADBLOCK WARNING MODAL STYLES
+           ========================================== */
+        .adblock-modal-bg {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 9999; backdrop-filter: blur(10px);
+            justify-content: center; align-items: center; opacity: 0; transition: 0.3s;
+        }
+        .adblock-modal-bg.show { display: flex; opacity: 1; }
+        .adblock-box {
+            background: var(--card-bg); border: 2px solid var(--primary); padding: 40px;
+            border-radius: 20px; text-align: center; max-width: 450px; width: 90%;
+            box-shadow: 0 0 50px rgba(255,51,102,0.3); animation: pop 0.5s ease-out;
+        }
+        @keyframes pop { 0% { transform: scale(0.8); } 100% { transform: scale(1); } }
+        .adblock-box h2 { color: var(--primary); font-size: 2rem; margin-bottom: 15px; }
+        .adblock-box p { color: #ccc; margin-bottom: 25px; line-height: 1.6; font-size: 1.05rem; }
+        .adblock-box button {
+            background: var(--primary); color: #000; border: none; padding: 12px 30px;
+            font-size: 1.1rem; font-weight: 800; border-radius: 30px; cursor: pointer;
+            transition: 0.3s;
+        }
+        .adblock-box button:hover { transform: scale(1.05); }
+
     </style>
 </head>
 <body>
+
+    <div class="adblock-modal-bg" id="adblockWarning">
+        <div class="adblock-box">
+            <h2>⚠️ AdBlocker Detected!</h2>
+            <p>Bhai, tera AdGuard/AdBlocker hamari website ke <strong>Meme API</strong> ko rok raha hai, isiliye templates load nahi ho rahe.</p>
+            <p>MemeHub Pro 100% Ad-Free hai. Kripya apna AdBlocker band karein ya is site ko <strong>Whitelist</strong> karein taaki website theek se chal sake.</p>
+            <button onclick="window.location.reload()">I Have Disabled It, Refresh!</button>
+        </div>
+    </div>
 
     <nav>
         <div class="logo">MemeHub Ultra</div>
@@ -104,6 +138,38 @@
     </div>
 
     <script>
+        // ==========================================
+        // ADBLOCK DETECTOR LOGIC (The Hacker Way)
+        // ==========================================
+        function detectAdBlocker() {
+            // Hum ek fake div banayenge jiska naam adblockers se milta-julta ho
+            let fakeAd = document.createElement("div");
+            fakeAd.className = "textads banner-ads banner_ads ad-unit ad-zone ad-space adsbox";
+            fakeAd.style.height = "1px";
+            fakeAd.style.width = "1px";
+            fakeAd.style.position = "absolute";
+            fakeAd.style.top = "-1000px";
+            document.body.appendChild(fakeAd);
+
+            // 0.3 second baad check karenge ki div zinda hai ya block ho gaya
+            setTimeout(function() {
+                let adblockModal = document.getElementById("adblockWarning");
+                if (fakeAd.offsetHeight === 0 || window.getComputedStyle(fakeAd).display === "none") {
+                    // Adblocker pakda gaya! Modal dikhao aur scrolling band karo
+                    adblockModal.classList.add("show");
+                    document.body.style.overflow = "hidden";
+                }
+                fakeAd.remove();
+            }, 300);
+        }
+
+        // Page load hote hi Adblock check karo
+        window.onload = detectAdBlocker;
+
+
+        // ==========================================
+        // MAIN WEBSITE LOGIC (Engine)
+        // ==========================================
         const grid = document.getElementById('meme-grid');
         const trigger = document.getElementById('loading-trigger');
         
@@ -141,6 +207,10 @@
 
         async function fetchData() {
             if (isFetching) return;
+            
+            // Check if Adblock modal is open, if yes, don't fetch
+            if(document.getElementById("adblockWarning").classList.contains("show")) return;
+
             isFetching = true;
             trigger.style.display = 'block';
 
@@ -158,23 +228,17 @@
                     }
                 }
 
-                // ==========================================
-                // TRIPLE PROXY BYPASS (Chrome Specific Fix)
-                // ==========================================
                 let data = null;
                 try {
-                    // Try 1: Direct Request
                     const res1 = await fetch(apiUrl);
                     if (!res1.ok) throw new Error("Direct Failed");
                     data = await res1.json();
                 } catch(e1) {
                     try {
-                        // Try 2: Safe Proxy (CORS Proxy IO)
                         const res2 = await fetch(`https://corsproxy.io/?${encodeURIComponent(apiUrl)}`);
                         if (!res2.ok) throw new Error("Proxy 1 Failed");
                         data = await res2.json();
                     } catch(e2) {
-                        // Try 3: Raw AllOrigins (Last Resort)
                         const res3 = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(apiUrl)}`);
                         data = await res3.json();
                     }
@@ -242,7 +306,7 @@
 
             } catch (error) {
                 console.error(error);
-                trigger.innerText = "Check your adblocker or refresh the page.";
+                trigger.innerText = "Network Error. Check AdBlocker or Refresh.";
             } finally {
                 isFetching = false;
             }
