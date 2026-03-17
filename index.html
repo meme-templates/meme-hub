@@ -50,9 +50,9 @@
         .categories {
             display: flex; gap: 15px; padding: 10px 20px; margin-bottom: 30px;
             overflow-x: auto; max-width: 1400px; margin-left: auto; margin-right: auto;
-            scrollbar-width: none; /* Firefox */
+            scrollbar-width: none;
         }
-        .categories::-webkit-scrollbar { display: none; /* Chrome */ }
+        .categories::-webkit-scrollbar { display: none; }
         .cat-btn {
             background: var(--card-bg); color: var(--text-muted); border: 1px solid rgba(255,255,255,0.1);
             padding: 10px 25px; border-radius: 25px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: 0.3s;
@@ -137,16 +137,13 @@
 
         function handleEnter(e) { if (e.key === 'Enter') searchMemes(); }
 
-        // Category Switcher Logic
         function setCategory(subreddit, type, btnElement) {
-            // Update Active Button
             document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
             btnElement.classList.add('active');
 
             currentSubreddit = subreddit;
             isVideoMode = (type === 'Videos');
             
-            // Reset grid and fetch fresh
             afterToken = ''; 
             currentQuery = '';
             document.getElementById('searchInput').value = '';
@@ -158,8 +155,6 @@
             currentQuery = document.getElementById('searchInput').value.trim();
             afterToken = ''; 
             document.getElementById('meme-grid').innerHTML = ''; 
-            
-            // Jab search karein tab UI reset karein
             document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
             fetchMemes();
         }
@@ -172,7 +167,8 @@
             const loadBtn = document.getElementById('loadBtn');
             const grid = document.getElementById('meme-grid');
             
-            status.innerText = "Loading Memes...";
+            status.innerText = "Bypassing Security & Loading Memes...";
+            status.style.display = 'block';
             if(afterToken !== '') loadBtn.innerText = "Loading...";
 
             try {
@@ -181,17 +177,14 @@
                     apiUrl = `https://www.reddit.com/r/${currentSubreddit}/search.json?q=${encodeURIComponent(currentQuery)}&restrict_sr=1&limit=50&after=${afterToken}`;
                 }
 
-                // MOBILE FIX: Agar direct API block ho, toh Fallback Proxy lagayega
-                let response;
-                try {
-                    response = await fetch(apiUrl);
-                    if(!response.ok) throw new Error("Direct block");
-                } catch(e) {
-                    console.log("Mobile network blocked API, using proxy...");
-                    response = await fetch(`https://corsproxy.io/?${encodeURIComponent(apiUrl)}`);
-                }
+                // THE BULLETPROOF BYPASS METHOD
+                const bypassUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(apiUrl)}`;
+                const response = await fetch(bypassUrl);
+                const proxyData = await response.json();
                 
-                const data = await response.json();
+                // Parsing the actual Reddit JSON from inside the proxy response
+                const data = JSON.parse(proxyData.contents);
+
                 afterToken = data.data.after; 
                 const posts = data.data.children;
                 let htmlContent = '';
@@ -199,9 +192,8 @@
                 posts.forEach(post => {
                     const postData = post.data;
                     let title = postData.title;
-                    if(title.length > 60) title = title.substring(0, 60) + "...";
+                    if(title && title.length > 60) title = title.substring(0, 60) + "...";
 
-                    // VIDEO TEMPLATES SUPPORT
                     if (postData.is_video && postData.media && postData.media.reddit_video) {
                         let videoUrl = postData.media.reddit_video.fallback_url;
                         htmlContent += `
@@ -213,8 +205,7 @@
                             </div>
                         </div>`;
                     } 
-                    // IMAGE TEMPLATES SUPPORT (Hide images if Video Mode is selected)
-                    else if (!isVideoMode && postData.url && postData.url.match(/\.(jpeg|jpg|gif|png)$/)) {
+                    else if (!isVideoMode && postData.url && postData.url.match(/\.(jpeg|jpg|gif|png)$/i)) {
                         let imageUrl = postData.url;
                         htmlContent += `
                         <div class="card">
@@ -227,39 +218,37 @@
                     }
                 });
 
-                if (htmlContent === '' && afterToken === null) {
+                if (htmlContent === '' && !afterToken) {
                     status.innerText = "No more templates found!";
                     document.getElementById('loadMoreSection').style.display = 'none';
                 } else {
                     grid.innerHTML += htmlContent;
-                    status.innerText = "";
+                    status.style.display = 'none';
                     document.getElementById('loadMoreSection').style.display = 'block';
                 }
 
             } catch (error) {
-                status.innerText = "Connection error. Using backup server...";
-                // Agar internet ekdam dead na ho toh automatically 3 sec baad wapas try karega
-                setTimeout(() => { isFetching = false; fetchMemes(); }, 3000);
+                console.error("Fetch Error:", error);
+                status.innerText = "Reddit blocked the request. Please wait 5 seconds and click Load More.";
+                document.getElementById('loadMoreSection').style.display = 'block';
             } finally {
                 isFetching = false;
                 loadBtn.innerText = "Load More Templates";
             }
         }
 
-        // UNIVERSAL DOWNLOADER (For both Image & Video)
         async function masterDownload(fileUrl, filename, btnElement) {
             const originalText = btnElement.innerText;
             btnElement.innerText = "Saving...";
             btnElement.style.opacity = "0.7";
 
             try {
-                // Check if it's a video
-                const isVideo = filename.includes('.mp4');
+                // Direct file fetch proxy
+                const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(fileUrl)}`;
+                const response = await fetch(proxyUrl);
                 
-                // Videos ke liye proxy zaroorat nahi hoti aksar, direct blob fetch karo
-                let fetchUrl = isVideo ? fileUrl : `https://wsrv.nl/?url=${encodeURIComponent(fileUrl)}`;
-                
-                const response = await fetch(fetchUrl);
+                if(!response.ok) throw new Error("Download block");
+
                 const blob = await response.blob();
                 const blobUrl = window.URL.createObjectURL(blob);
                 
@@ -277,7 +266,8 @@
                 setTimeout(() => { btnElement.innerText = originalText; }, 2000);
                 
             } catch (error) {
-                alert("Mobile browser blocked direct download! Opening in new tab to save.");
+                // Failsafe
+                alert("Mobile security blocked direct save! Opening file in a new tab, long-press to save.");
                 window.open(fileUrl, '_blank');
                 btnElement.innerText = originalText;
             } finally {
@@ -285,6 +275,7 @@
             }
         }
 
+        // Run on load
         fetchMemes();
     </script>
 </body>
