@@ -66,10 +66,6 @@
         .quick-actions { display: flex; gap: 10px; }
         .q-btn { background: rgba(255,255,255,0.2); backdrop-filter: blur(5px); border: none; color: white; padding: 8px; border-radius: 8px; font-weight: 600; cursor: pointer; flex-grow: 1; transition: 0.3s; font-size: 0.8rem; text-transform: uppercase; }
         .q-btn:hover { background: var(--primary); color: #000; }
-
-        /* Skeleton Loader */
-        .skeleton-card { background: var(--card-bg); border-radius: 16px; height: 300px; margin-bottom: 20px; break-inside: avoid; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { background-color: #18181b; } 50% { background-color: #27272a; } 100% { background-color: #18181b; } }
         
         #loading-trigger { text-align: center; padding: 20px; color: var(--primary); font-weight: bold; font-size: 1.2rem; }
     </style>
@@ -111,15 +107,11 @@
         const grid = document.getElementById('meme-grid');
         const trigger = document.getElementById('loading-trigger');
         
-        let currentMode = 'image'; // 'image' or 'video'
+        let currentMode = 'image'; 
         let currentSubreddit = 'MemeTemplatesOfficial';
         let searchQuery = '';
         let afterToken = '';
         let isFetching = false;
-        
-        // ==========================================
-        // DUPLICATE KILLER: Memory Set
-        // ==========================================
         let seenMemes = new Set(); 
 
         function handleEnter(e) { if (e.key === 'Enter') searchMemes(); }
@@ -142,7 +134,7 @@
 
         function resetEngine() {
             grid.innerHTML = '';
-            seenMemes.clear(); // Nayi search par memory clear
+            seenMemes.clear(); 
             afterToken = '';
             fetchData();
         }
@@ -155,30 +147,39 @@
             try {
                 let apiUrl = '';
                 
-                // Advanced Reddit API Routing
                 if (searchQuery !== '') {
-                    // Search with video filter if needed
                     let q = currentMode === 'video' ? `${searchQuery} flair:video` : searchQuery;
                     apiUrl = `https://www.reddit.com/r/${currentSubreddit}/search.json?q=${encodeURIComponent(q)}&restrict_sr=1&limit=50&after=${afterToken}`;
                 } else {
                     if (currentMode === 'video') {
-                        // Trick to get only videos from the subreddit
                         apiUrl = `https://www.reddit.com/r/${currentSubreddit}/search.json?q=is_video:true&restrict_sr=1&sort=hot&limit=50&after=${afterToken}`;
                     } else {
                         apiUrl = `https://www.reddit.com/r/${currentSubreddit}/hot.json?limit=50&after=${afterToken}`;
                     }
                 }
 
-                // Proxy Fallback for Mobile Data Blocks
-                let response;
+                // ==========================================
+                // TRIPLE PROXY BYPASS (Chrome Specific Fix)
+                // ==========================================
+                let data = null;
                 try {
-                    response = await fetch(apiUrl);
-                    if (!response.ok) throw new Error("Blocked");
-                } catch(err) {
-                    response = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(apiUrl)}`);
+                    // Try 1: Direct Request
+                    const res1 = await fetch(apiUrl);
+                    if (!res1.ok) throw new Error("Direct Failed");
+                    data = await res1.json();
+                } catch(e1) {
+                    try {
+                        // Try 2: Safe Proxy (CORS Proxy IO)
+                        const res2 = await fetch(`https://corsproxy.io/?${encodeURIComponent(apiUrl)}`);
+                        if (!res2.ok) throw new Error("Proxy 1 Failed");
+                        data = await res2.json();
+                    } catch(e2) {
+                        // Try 3: Raw AllOrigins (Last Resort)
+                        const res3 = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(apiUrl)}`);
+                        data = await res3.json();
+                    }
                 }
                 
-                const data = await response.json();
                 afterToken = data.data.after;
                 const posts = data.data.children;
                 
@@ -189,14 +190,13 @@
                     const postData = post.data;
                     const postId = postData.id;
                     
-                    // Duplicate Killer Engine: Agar pehle dikh chuka hai toh Skip kar do!
                     if (seenMemes.has(postId)) return;
 
                     let title = postData.title.replace(/'/g, "\\'");
                     if(title.length > 50) title = title.substring(0, 50) + "...";
 
                     if (currentMode === 'video' && postData.is_video && postData.media && postData.media.reddit_video) {
-                        seenMemes.add(postId); // Yaad rakh liya
+                        seenMemes.add(postId); 
                         addedCount++;
                         let videoUrl = postData.media.reddit_video.fallback_url;
                         
@@ -213,7 +213,7 @@
                         </div>`;
                     } 
                     else if (currentMode === 'image' && postData.url && postData.url.match(/\.(jpeg|jpg|png)$/)) {
-                        seenMemes.add(postId); // Yaad rakh liya
+                        seenMemes.add(postId); 
                         addedCount++;
                         let imgUrl = postData.url;
                         
@@ -233,33 +233,28 @@
 
                 grid.innerHTML += html;
 
-                // Agar API ne posts diye par filter mein sab kat gaye (ya end aagaya)
                 if (afterToken === null) {
                     trigger.innerText = "No more templates found!";
                 } else if (addedCount === 0) {
-                    // Agar duplicates nikalne ke baad kuch nahi bacha, toh auto-fetch next page
                     isFetching = false; 
                     fetchData();
                 }
 
             } catch (error) {
                 console.error(error);
-                trigger.innerText = "Network Error. Please refresh.";
+                trigger.innerText = "Check your adblocker or refresh the page.";
             } finally {
                 isFetching = false;
             }
         }
 
-        // ==========================================
-        // PRO INTERSECTION OBSERVER (Auto Load Trigger)
-        // ==========================================
         const observer = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting && afterToken !== null) {
                 fetchData();
             }
         }, { threshold: 0.1 });
 
-        observer.observe(trigger); // Jab bhi "Fetching more" screen par aayega, API chal padegi
+        observer.observe(trigger); 
 
     </script>
 </body>
